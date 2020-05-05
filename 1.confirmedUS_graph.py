@@ -1,0 +1,44 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Apr  8 20:24:43 2020
+
+@author: Cher
+"""
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Qt5Agg')
+
+trainDF = pd.read_csv("time_series_covid19_confirmed_US.csv")
+#print(trainDF)
+
+trainData = trainDF.iloc[:,50:]
+#print(trainData.shape)
+#print(len(trainData.columns))
+
+confirmedNoList = []
+for col in range(len(trainData.columns)):
+#for col in range(75,77):    
+    confirmedNo = 0
+    
+    for row in range(len(trainData.index)):
+#    for row in range(0,5):    
+        temp = trainData.iloc[row,col]
+        confirmedNo += temp
+        #print(temp)
+    #print(confirmedNo)
+    confirmedNoList = np.append(confirmedNoList, confirmedNo)
+#print(confirmedNoList)
+tmpDict = {'date': trainData.columns,'confirmed number' : confirmedNoList} 
+
+confirmedDF = pd.DataFrame(tmpDict)
+print(confirmedDF) 
+
+plt.suptitle('Covid-19 in the U.S.', fontsize = 20)
+plt.xlabel('Date', fontsize = 15)
+plt.ylabel('Total Confirmed Cases', fontsize = 15)
+plt.plot(trainData.columns,confirmedNoList, '-',color='red', label='MSETrain')
+
+plt.show()
